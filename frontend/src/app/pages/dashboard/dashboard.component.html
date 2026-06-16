@@ -1,0 +1,62 @@
+<div class="container-fluid p-4">
+  <h2 class="text-info mb-4">🧬 Dashboard</h2>
+
+  <app-spinner *ngIf="loading()"></app-spinner>
+
+  <div *ngIf="!loading()">
+    <!-- Stats Cards -->
+    <div class="row g-3 mb-4">
+      <div class="col-md-3">
+        <div class="stat-card">
+          <div class="stat-icon">👤</div>
+          <div class="stat-value">{{ charStats?.total }}</div>
+          <div class="stat-label">Personajes</div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stat-card green">
+          <div class="stat-icon">💚</div>
+          <div class="stat-value">{{ charStats?.alive }}</div>
+          <div class="stat-label">Vivos</div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stat-card">
+          <div class="stat-icon">🌍</div>
+          <div class="stat-value">{{ locStats?.total }}</div>
+          <div class="stat-label">Locaciones</div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stat-card">
+          <div class="stat-icon">📺</div>
+          <div class="stat-value">{{ epStats?.total }}</div>
+          <div class="stat-label">Episodios</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="chart-card">
+          <h5>Estado de personajes</h5>
+          <canvas baseChart [data]="statusChartData" type="doughnut"></canvas>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="chart-card">
+          <h5>Top especies</h5>
+          <canvas baseChart [data]="speciesChartData" type="bar"></canvas>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="chart-card">
+          <h5>🏆 Personajes con más apariciones en la serie</h5>
+          <canvas baseChart [data]="topCharactersChartData" type="bar"
+            [options]="chartOptions"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

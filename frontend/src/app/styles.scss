@@ -1,0 +1,24 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import '@fortawesome/fontawesome-free/css/all.min.css';
+
+* { box-sizing: border-box; }
+
+body {
+  background-color: #0a0a1a;
+  color: #caf0f8;
+  font-family: 'Segoe UI', sans-serif;
+  min-height: 100vh;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0f3460; }
+::-webkit-scrollbar-thumb { background: #00b4d8; border-radius: 3px; }
+
+.text-info { color: #00b4d8 !important; }
+
+.btn-info {
+  background: #00b4d8;
+  border-color: #00b4d8;
+  color: #0a0a1a;
+  &:hover { background: #0096c7; }
+}

@@ -1,0 +1,15 @@
+.filter-bar {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+
+  .form-control {
+    background: #16213e;
+    border-color: #0f3460;
+    color: #caf0f8;
+    max-width: 220px;
+
+    &::placeholder { color: #90e0ef; }
+    &:focus { border-color: #00b4d8; box-shadow: none; }
+  }
+}

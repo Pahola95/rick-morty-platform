@@ -1,0 +1,62 @@
+.detail-card {
+  background: #16213e;
+  border: 1px solid #0f3460;
+  border-radius: 16px;
+  padding: 2rem;
+  color: #caf0f8;
+}
+
+.detail-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+
+  .location-icon {
+    font-size: 4rem;
+    background: #0f3460;
+    padding: 1rem;
+    border-radius: 12px;
+  }
+}
+
+.info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.info-item {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+
+  .label {
+    color: #90e0ef;
+    font-weight: 600;
+    min-width: 140px;
+  }
+}
+
+.residents-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.resident-badge {
+  background: #0f3460;
+  border: 1px solid #00b4d8;
+  color: #caf0f8;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  text-decoration: none;
+  transition: background 0.2s;
+
+  &:hover {
+    background: #00b4d8;
+    color: #0a0a1a;
+  }
+}

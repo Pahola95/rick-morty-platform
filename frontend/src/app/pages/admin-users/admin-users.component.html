@@ -1,0 +1,39 @@
+<div class="container-fluid p-4">
+  <h2 class="text-info mb-4">👥 Gestión de Usuarios</h2>
+
+  <app-spinner *ngIf="loading()"></app-spinner>
+
+  <div class="table-responsive" *ngIf="!loading()">
+    <table class="table table-dark table-hover">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Email</th>
+          <th>Rol</th>
+          <th>Creado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users()">
+          <td>{{ user.name }}</td>
+          <td>{{ user.email }}</td>
+          <td>
+            <span class="badge" [ngClass]="user.role === 'ADMIN' ? 'bg-warning' : 'bg-info'">
+              {{ user.role }}
+            </span>
+          </td>
+          <td>{{ user.createdAt | date:'dd/MM/yyyy' }}</td>
+          <td>
+            <button class="btn btn-sm btn-outline-warning me-2" (click)="changeRole(user)">
+              Cambiar rol
+            </button>
+            <button class="btn btn-sm btn-outline-danger" (click)="deleteUser(user.id)">
+              Eliminar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

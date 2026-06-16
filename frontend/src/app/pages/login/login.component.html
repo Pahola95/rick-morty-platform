@@ -1,0 +1,43 @@
+<div class="login-container">
+  <div class="login-card">
+
+    <!-- Logo / Header -->
+    <div class="login-header">
+      <div class="portal-icon">🧪</div>
+      <h1>Rick & Morty</h1>
+      <p class="subtitle">Portal de Gestión Interdimensional</p>
+    </div>
+
+    <!-- Botón de login -->
+    <div class="login-body">
+      <p class="welcome-text">
+        Bienvenido al portal. Inicia sesión para explorar personajes,
+        locaciones y episodios del universo Rick & Morty.
+      </p>
+
+      <div *ngIf="loginError" class="alert alert-danger" role="alert">
+        {{ loginError }}
+      </div>
+
+      <button class="btn-login" (click)="login()" type="button">
+        <span class="btn-icon">🚀</span>
+        Iniciar Sesión
+      </button>
+
+      <p class="hint-text">
+        ¿Primera vez? Auth0 te permite registrarte fácilmente.
+      </p>
+    </div>
+
+    <!-- Footer -->
+    <div class="login-footer">
+      <small>Powered by Rick & Morty API 🛸</small>
+    </div>
+
+  </div>
+
+  <!-- Fondo animado -->
+  <div class="bg-bubbles">
+    <span *ngFor="let b of bubbles"></span>
+  </div>
+</div>

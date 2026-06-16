@@ -1,0 +1,39 @@
+<div class="container-fluid p-4">
+  <h2 class="text-info mb-4">📺 Episodios</h2>
+
+  <!-- Filtros -->
+  <div class="filter-bar mb-4">
+    <input class="form-control" placeholder="Buscar por nombre..."
+      [(ngModel)]="filters.name" (keyup.enter)="applyFilters()">
+    <input class="form-control" placeholder="Código (S01E01...)"
+      [(ngModel)]="filters.episode" (keyup.enter)="applyFilters()">
+    <button class="btn btn-info" (click)="applyFilters()">🔍 Buscar</button>
+  </div>
+
+  <app-spinner *ngIf="loading()"></app-spinner>
+
+  <div class="row g-3" *ngIf="!loading()">
+    <div class="col-md-3 col-sm-6" *ngFor="let episode of episodes()">
+      <app-card
+        [id]="episode.id"
+        [name]="episode.name"
+        [subtitle]="episode.air_date"
+        [badge]="episode.episode"
+        [type]="'EPISODE'"
+        [isFavorite]="isFavorite(episode.id)"
+        (cardClick)="goToDetail(episode.id)"
+        (favoriteToggle)="toggleFavorite(episode)">
+      </app-card>
+    </div>
+
+    <div class="col-12 text-center text-muted py-5" *ngIf="episodes().length === 0">
+      No se encontraron episodios con esos filtros.
+    </div>
+  </div>
+
+  <div class="mt-4">
+    <app-pagination [currentPage]="currentPage" [totalPages]="totalPages"
+      (pageChange)="onPageChange($event)">
+    </app-pagination>
+  </div>
+</div>

@@ -1,0 +1,30 @@
+.fav-card {
+  background: #16213e;
+  border: 1px solid #0f3460;
+  border-radius: 12px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+  color: #caf0f8;
+
+  &:hover { transform: translateY(-4px); }
+
+  .fav-img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
+  }
+
+  .fav-no-img {
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    background: #0f3460;
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
+  }
+}

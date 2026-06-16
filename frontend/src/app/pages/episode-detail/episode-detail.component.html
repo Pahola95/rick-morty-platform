@@ -1,0 +1,56 @@
+<div class="container p-4">
+  <app-spinner *ngIf="loading()"></app-spinner>
+
+  <div *ngIf="!loading() && episode()">
+    <button class="btn btn-outline-info mb-4" routerLink="/episodes">← Volver</button>
+
+    <div class="detail-card">
+      <div class="detail-header">
+        <div class="episode-icon">📺</div>
+        <div>
+          <h2 class="text-info">{{ episode()?.name }}</h2>
+          <span class="badge bg-info me-2">{{ episode()?.episode }}</span>
+          <span class="badge bg-secondary">{{ getSeasonInfo(episode()?.episode || '') }}</span>
+        </div>
+        <button class="btn ms-auto"
+          [class.btn-warning]="isFavorite()"
+          [class.btn-outline-warning]="!isFavorite()"
+          (click)="toggleFavorite()">
+          {{ isFavorite() ? '⭐ En favoritos' : '☆ Agregar a favoritos' }}
+        </button>
+      </div>
+
+      <!-- Info -->
+      <div class="info-grid mt-4">
+        <div class="info-item">
+          <span class="label">Código</span>
+          <span>{{ episode()?.episode }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Fecha de emisión</span>
+          <span>{{ episode()?.air_date }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Personajes</span>
+          <span>{{ episode()?.characters?.length || 0 }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Creado</span>
+          <span>{{ episode()?.created | date:'dd/MM/yyyy' }}</span>
+        </div>
+      </div>
+
+      <!-- Personajes -->
+      <div class="mt-4" *ngIf="(episode()?.characters?.length ?? 0) > 0">
+        <h5 class="text-info">👤 Personajes en este episodio ({{ episode()?.characters?.length }})</h5>
+        <div class="characters-grid">
+          <a class="character-badge"
+            *ngFor="let c of episode()?.characters"
+            [routerLink]="['/characters', getCharacterId(c)]">
+            #{{ getCharacterId(c) }}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

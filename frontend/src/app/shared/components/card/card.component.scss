@@ -1,0 +1,31 @@
+.card {
+  background: #16213e;
+  border: 1px solid #0f3460;
+  color: #caf0f8;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 180, 216, 0.3);
+  }
+
+  .card-img-top {
+    height: 200px;
+    object-fit: cover;
+  }
+
+  .card-no-img {
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    background: #0f3460;
+  }
+
+  .card-footer {
+    background: transparent;
+    border-top: 1px solid #0f3460;
+  }
+}

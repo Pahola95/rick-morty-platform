@@ -1,0 +1,30 @@
+<div class="container-fluid p-4">
+  <h2 class="text-info mb-4">⭐ Mis Favoritos</h2>
+
+  <app-spinner *ngIf="loading()"></app-spinner>
+
+  <div *ngIf="!loading()">
+    <p *ngIf="favorites.length === 0" class="text-muted">
+      No tienes favoritos aún. ¡Explora personajes, lugares y episodios!
+    </p>
+
+    <div class="row g-3" *ngIf="favorites.length > 0">
+      <div class="col-md-3 col-sm-6" *ngFor="let fav of favorites">
+        <div class="fav-card" (click)="goToDetail(fav)">
+          <img *ngIf="fav.image" [src]="fav.image" [alt]="fav.name" class="fav-img">
+          <div class="fav-no-img" *ngIf="!fav.image">
+            {{ fav.type === 'LOCATION' ? '🌍' : '📺' }}
+          </div>
+          <div class="fav-body">
+            <h6>{{ fav.name }}</h6>
+            <span class="badge bg-info">{{ fav.type }}</span>
+          </div>
+          <button class="btn btn-sm btn-outline-danger w-100 mt-2"
+            (click)="$event.stopPropagation(); remove(fav.id)">
+            🗑️ Eliminar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

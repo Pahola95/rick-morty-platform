@@ -1,0 +1,21 @@
+<div class="card h-100" (click)="cardClick.emit()">
+  <img *ngIf="image" [src]="image" [alt]="name" class="card-img-top">
+  <div class="card-no-img" *ngIf="!image">
+    <span>{{ type === 'LOCATION' ? '🌍' : '📺' }}</span>
+  </div>
+  <div class="card-body">
+    <h6 class="card-title">{{ name }}</h6>
+    <p class="card-text text-muted small" *ngIf="subtitle">{{ subtitle }}</p>
+    <span *ngIf="badge" class="badge" [ngClass]="badgeColor || 'bg-secondary'">
+      {{ badge }}
+    </span>
+  </div>
+  <div class="card-footer">
+    <button class="btn btn-sm w-100"
+      [class.btn-warning]="isFavorite"
+      [class.btn-outline-warning]="!isFavorite"
+      (click)="$event.stopPropagation(); favoriteToggle.emit()">
+      {{ isFavorite ? '⭐ Guardado' : '☆ Favorito' }}
+    </button>
+  </div>
+</div>

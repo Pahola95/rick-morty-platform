@@ -1,0 +1,57 @@
+<div class="container p-4">
+  <app-spinner *ngIf="loading()"></app-spinner>
+
+  <div *ngIf="!loading() && character()">
+    <button class="btn btn-outline-info mb-4" routerLink="/characters">← Volver</button>
+
+    <div class="detail-card">
+      <div class="row">
+        <div class="col-md-4 text-center">
+          <img [src]="character()?.image" [alt]="character()?.name" class="character-img">
+          <button class="btn mt-3 w-100"
+            [class.btn-warning]="isFavorite()"
+            [class.btn-outline-warning]="!isFavorite()"
+            (click)="toggleFavorite()">
+            {{ isFavorite() ? '⭐ En favoritos' : '☆ Agregar a favoritos' }}
+          </button>
+        </div>
+        <div class="col-md-8">
+          <h2 class="text-info">{{ character()?.name }}</h2>
+          <div class="info-grid mt-3">
+            <div class="info-item">
+              <span class="label">Estado</span>
+              <span class="badge"
+                [ngClass]="character()?.status === 'Alive' ? 'bg-success' :
+                           character()?.status === 'Dead' ? 'bg-danger' : 'bg-secondary'">
+                {{ character()?.status }}
+              </span>
+            </div>
+            <div class="info-item">
+              <span class="label">Especie</span>
+              <span>{{ character()?.species }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Género</span>
+              <span>{{ character()?.gender }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Origen</span>
+              <span>{{ character()?.origin?.name }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Última locación</span>
+              <span>{{ character()?.location?.name }}</span>
+            </div>
+          </div>
+
+          <h5 class="text-info mt-4">Aparece en {{ character()?.episode?.length }} episodios</h5>
+          <div class="episodes-grid">
+            <span class="ep-badge" *ngFor="let ep of character()?.episode">
+              EP {{ getEpisodeNumber(ep) }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

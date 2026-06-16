@@ -1,0 +1,18 @@
+# Node
+node_modules/
+.env
+
+# Logs
+logs/
+*.log
+
+# Docker
+.docker/
+
+# Angular
+frontend/dist/
+frontend/.angular/
+
+# OS
+.DS_Store
+Thumbs.db

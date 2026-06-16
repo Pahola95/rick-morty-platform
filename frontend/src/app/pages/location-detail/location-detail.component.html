@@ -1,0 +1,56 @@
+<div class="container p-4">
+  <app-spinner *ngIf="loading()"></app-spinner>
+
+  <div *ngIf="!loading() && location()">
+    <button class="btn btn-outline-info mb-4" routerLink="/locations">← Volver</button>
+
+    <div class="detail-card">
+      <div class="detail-header">
+        <div class="location-icon">🌍</div>
+        <div>
+          <h2 class="text-info">{{ location()?.name }}</h2>
+          <span class="badge bg-info me-2">{{ location()?.type }}</span>
+          <span class="badge bg-secondary">{{ location()?.dimension }}</span>
+        </div>
+        <button class="btn ms-auto"
+          [class.btn-warning]="isFavorite()"
+          [class.btn-outline-warning]="!isFavorite()"
+          (click)="toggleFavorite()">
+          {{ isFavorite() ? '⭐ En favoritos' : '☆ Agregar a favoritos' }}
+        </button>
+      </div>
+
+      <!-- Info -->
+      <div class="info-grid mt-4">
+        <div class="info-item">
+          <span class="label">Tipo</span>
+          <span>{{ location()?.type }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Dimensión</span>
+          <span>{{ location()?.dimension }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Residentes</span>
+          <span>{{ totalResidents }}</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Creado</span>
+          <span>{{ location()?.created | date:'dd/MM/yyyy' }}</span>
+        </div>
+      </div>
+
+      <!-- Residentes -->
+      <div class="mt-4" *ngIf="(location()?.residents?.length ?? 0) > 0">
+        <h5 class="text-info">👤 Residentes ({{ totalResidents }})</h5>
+        <div class="residents-grid">
+          <a class="resident-badge"
+            *ngFor="let r of location()?.residents"
+            [routerLink]="['/characters', getResidentId(r)]">
+            #{{ getResidentId(r) }}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
