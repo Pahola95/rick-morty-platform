@@ -1,29 +1,14 @@
-const { Sequelize } = require('sequelize');
+const mongoose = require('mongoose');
 require('dotenv').config();
-
-const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASSWORD,
-  {
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    dialect: 'postgres',
-    logging: false,
-    pool: { max: 5, min: 0, acquire: 30000, idle: 10000 }
-  }
-);
 
 const connectDB = async () => {
   try {
-    await sequelize.authenticate();
-    console.log('✅ PostgreSQL conectado');
-    await sequelize.sync({ alter: true });
-    console.log('✅ Modelos sincronizados');
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log('✅ MongoDB Atlas conectado');
   } catch (error) {
-    console.error('❌ Error PostgreSQL:', error.message);
+    console.error('❌ Error MongoDB:', error.message);
     process.exit(1);
   }
 };
 
-module.exports = { sequelize, connectDB };
+module.exports = { connectDB };

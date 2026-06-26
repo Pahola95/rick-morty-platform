@@ -23,7 +23,9 @@ const syncUser = async (req, res, next) => {
       user = await userRepository.createUser({ auth0Id, email, name });
     } else if (!user.email && email) {
       // Actualizar email si estaba vacío
-      await user.update({ email, name });
+      user.email = email;
+      user.name = name;
+      await user.save();
     }
 
     req.user = user;

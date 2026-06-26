@@ -2,13 +2,11 @@ const Favorite = require('./favorite.model');
 const { publishMessage } = require('../../config/rabbitmq');
 
 const getFavorites = async (userId) => {
-  return await Favorite.findAll({ where: { userId } });
+  return await Favorite.find({ userId });
 };
 
 const addFavorite = async (userId, data) => {
-  const existing = await Favorite.findOne({
-    where: { userId, type: data.type, externalId: data.externalId }
-  });
+  const existing = await Favorite.findOne({ userId, type: data.type, externalId: data.externalId });
   if (existing) throw { status: 400, message: 'Ya está en favoritos' };
 
   const favorite = await Favorite.create({ ...data, userId });
@@ -22,9 +20,8 @@ const addFavorite = async (userId, data) => {
 };
 
 const removeFavorite = async (userId, id) => {
-  const favorite = await Favorite.findOne({ where: { id, userId } });
+  const favorite = await Favorite.findOneAndDelete({ _id: id, userId });
   if (!favorite) throw { status: 404, message: 'Favorito no encontrado' };
-  await favorite.destroy();
   return { message: 'Eliminado de favoritos' };
 };
 

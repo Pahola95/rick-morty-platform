@@ -1,28 +1,32 @@
-const { DataTypes } = require('sequelize');
-const { sequelize } = require('../../config/db');
-const User = require('../users/user.model');
+const mongoose = require('mongoose');
 
-const Favorite = sequelize.define('Favorite', {
-  id: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
-    primaryKey: true
+const favoriteSchema = new mongoose.Schema(
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true
+    },
+    type: {
+      type: String,
+      enum: ['CHARACTER', 'LOCATION', 'EPISODE'],
+      required: true
+    },
+    externalId: {
+      type: Number,
+      required: true
+    },
+    name: {
+      type: String
+    },
+    image: {
+      type: String
+    }
   },
-  type: {
-    type: DataTypes.ENUM('CHARACTER', 'LOCATION', 'EPISODE'),
-    allowNull: false
-  },
-  externalId: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
-  name: DataTypes.STRING,
-  image: DataTypes.STRING
-}, {
-  tableName: 'favorites',
-  timestamps: true
-});
+  { timestamps: true }
+);
 
-Favorite.belongsTo(User, { foreignKey: 'userId' });
+// Índice único para evitar duplicados por usuario
+favoriteSchema.index({ userId: 1, type: 1, externalId: 1 }, { unique: true });
 
-module.exports = Favorite;
+module.exports = mongoose.model('Favorite', favoriteSchema);

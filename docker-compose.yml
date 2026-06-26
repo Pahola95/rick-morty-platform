@@ -13,21 +13,15 @@ services:
     environment:
       PORT: 3000
       NODE_ENV: development
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_NAME: rickmorty_db
-      DB_USER: postgres
-      DB_PASSWORD: postgres123
+      MONGODB_URI: ${MONGODB_URI}
       REDIS_HOST: redis
       REDIS_PORT: 6379
       RABBITMQ_URL: amqp://rabbitmq
       AUTH0_AUDIENCE: https://rickmorty-api/
       AUTH0_ISSUER_BASE_URL: https://dev-sqefy6r87osts5th.us.auth0.com
       AUTH0_CLIENT_ID: pO4siVKY1QRnFOZ11xxPXGytAQbbV1hu
-      SWAGGER_ENABLED: true  
+      SWAGGER_ENABLED: true
     depends_on:
-      postgres:
-        condition: service_healthy
       redis:
         condition: service_healthy
       rabbitmq:
@@ -49,27 +43,6 @@ services:
       - "4200:80"
     depends_on:
       - backend
-    networks:
-      - rickmorty_network
-    restart: unless-stopped
-
-  # ─── PostgreSQL ────────────────────────────────────────
-  postgres:
-    image: postgres:15-alpine
-    container_name: rickmorty_postgres
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_DB: rickmorty_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres123
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
     networks:
       - rickmorty_network
     restart: unless-stopped
@@ -96,8 +69,8 @@ services:
     image: rabbitmq:3-management-alpine
     container_name: rickmorty_rabbitmq
     ports:
-      - "5672:5672"    # Conexión de la app
-      - "15672:15672"  # Panel de administración
+      - "5672:5672"
+      - "15672:15672"
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
@@ -114,7 +87,6 @@ services:
 
 # ─── Volúmenes ───────────────────────────────────────────
 volumes:
-  postgres_data:
   redis_data:
   rabbitmq_data:
 

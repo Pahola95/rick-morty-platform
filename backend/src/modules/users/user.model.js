@@ -1,32 +1,28 @@
-const { DataTypes } = require('sequelize');
-const { sequelize } = require('../../config/db');
+const mongoose = require('mongoose');
 
-const User = sequelize.define('User', {
-  id: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
-    primaryKey: true
+const userSchema = new mongoose.Schema(
+  {
+    auth0Id: {
+      type: String,
+      unique: true,
+      required: true
+    },
+    name: {
+      type: String,
+      required: true
+    },
+    email: {
+      type: String,
+      unique: true,
+      sparse: true // permite múltiples documentos sin email (null)
+    },
+    role: {
+      type: String,
+      enum: ['ADMIN', 'USER'],
+      default: 'USER'
+    }
   },
-  auth0Id: {
-    type: DataTypes.STRING,
-    unique: true,
-    allowNull: false
-  },
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  email: {
-    type: DataTypes.STRING,
-    unique: true
-  },
-  role: {
-    type: DataTypes.ENUM('ADMIN', 'USER'),
-    defaultValue: 'USER'
-  }
-}, {
-  tableName: 'users',
-  timestamps: true
-});
+  { timestamps: true }
+);
 
-module.exports = User;
+module.exports = mongoose.model('User', userSchema);
