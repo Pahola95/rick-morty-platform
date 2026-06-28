@@ -89,8 +89,8 @@ export class EpisodesComponent implements OnInit {
     });
   }
 
-  isFavorite(id: number): boolean {
-    return this.favorites().some(f => f.type === 'EPISODE' && f.externalId === id);
+  isFavorite(episode: Episode): boolean {
+    return this.favorites().some(f => f.type === 'EPISODE' && f.externalId === episode.id);
   }
 
   toggleFavorite(episode: Episode) {
@@ -109,7 +109,7 @@ export class EpisodesComponent implements OnInit {
   onSortChange(state: SortState) { this.sort.set(state); }
   applyFilters() { this.currentPage = 1; this.loadEpisodes(); }
   onPageChange(page: number) { this.currentPage = page; this.loadEpisodes(); }
-  goToDetail(id: number) { this.router.navigate(['/episodes', id]); }
+  goToDetail(id: number | string) { this.router.navigate(['/episodes', id]); }
 
   getSeasonNumber(episodeCode: string): string {
     return episodeCode ? episodeCode.substring(0, 3) : '';

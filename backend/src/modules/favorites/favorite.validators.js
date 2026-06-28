@@ -15,9 +15,15 @@ const addFavoriteRules = [
   body('externalId')
     .notEmpty()
     .withMessage('externalId es requerido')
-    .isInt({ min: 1 })
-    .withMessage('externalId debe ser un entero mayor o igual a 1')
-    .toInt(),
+    .custom((value) => {
+      // Accepts a positive integer (external API) or a 24-char hex MongoDB ObjectId (local episode)
+      const isPositiveInt = Number.isInteger(Number(value)) && Number(value) >= 1;
+      const isObjectId = /^[a-f\d]{24}$/i.test(String(value));
+      if (!isPositiveInt && !isObjectId) {
+        throw new Error('externalId debe ser un entero mayor o igual a 1, o un ObjectId válido');
+      }
+      return true;
+    }),
 
   body('name')
     .notEmpty()

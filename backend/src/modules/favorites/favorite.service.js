@@ -2,7 +2,8 @@ const Favorite = require('./favorite.model');
 const { publishMessage } = require('../../config/rabbitmq');
 
 const getFavorites = async (userId) => {
-  return await Favorite.find({ userId });
+  const favorites = await Favorite.find({ userId }).lean();
+  return favorites.map(f => ({ ...f, id: f._id.toString() }));
 };
 
 const addFavorite = async (userId, data) => {

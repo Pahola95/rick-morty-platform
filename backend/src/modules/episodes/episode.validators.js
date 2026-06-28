@@ -27,12 +27,18 @@ const listEpisodesRules = [
 
 /**
  * Validators for GET /api/episodes/:id
+ * Accepts either a positive integer (external API) or a 24-char hex MongoDB ObjectId (local).
  */
 const getByIdRules = [
   param('id')
-    .isInt({ min: 1 })
-    .withMessage('id debe ser un entero mayor o igual a 1')
-    .toInt(),
+    .custom((value) => {
+      const isNumeric = /^\d+$/.test(value) && parseInt(value, 10) >= 1;
+      const isObjectId = /^[a-f\d]{24}$/i.test(value);
+      if (!isNumeric && !isObjectId) {
+        throw new Error('id debe ser un entero mayor o igual a 1, o un ObjectId válido');
+      }
+      return true;
+    }),
 ];
 
 module.exports = { listEpisodesRules, getByIdRules };

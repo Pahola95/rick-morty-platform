@@ -11,11 +11,29 @@ export class EpisodeService {
     return this.api.get('/episodes', { page, ...filters });
   }
 
-  getEpisodeById(id: number): Observable<any> {
+  getEpisodeById(id: number | string): Observable<any> {
     return this.api.get(`/episodes/${id}`);
   }
 
   getEpisodeStats(): Observable<{ success: boolean; data: EpisodeStats }> {
     return this.api.get('/episodes/stats');
+  }
+
+  getLocalEpisodes(): Observable<any> {
+    return this.api.get('/episodes/local');
+  }
+
+  deleteLocalEpisode(id: string): Observable<any> {
+    return this.api.delete(`/episodes/local/${id}`);
+  }
+
+  deleteAllLocalEpisodes(): Observable<any> {
+    return this.api.delete('/episodes/local/all');
+  }
+
+  uploadEpisodesCSV(file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.api.postForm('/episodes/upload-csv', formData);
   }
 }

@@ -25,6 +25,12 @@ export class ApiService {
     return this.http.post<T>(`${this.baseUrl}${path}`, body);
   }
 
+  /** Send a FormData payload (multipart/form-data). Do NOT set Content-Type manually —
+   *  Angular's HttpClient will set the boundary automatically when body is FormData. */
+  postForm<T>(path: string, formData: FormData): Observable<T> {
+    return this.http.post<T>(`${this.baseUrl}${path}`, formData);
+  }
+
   put<T>(path: string, body: any): Observable<T> {
     return this.http.put<T>(`${this.baseUrl}${path}`, body);
   }

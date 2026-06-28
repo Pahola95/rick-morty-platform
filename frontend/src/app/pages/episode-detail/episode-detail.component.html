@@ -11,6 +11,7 @@
           <h2 class="text-info">{{ episode()?.name }}</h2>
           <span class="badge bg-info me-2">{{ episode()?.episode }}</span>
           <span class="badge bg-secondary">{{ getSeasonInfo(episode()?.episode || '') }}</span>
+          <span *ngIf="isLocalEpisode" class="badge bg-success ms-2" title="Episodio cargado localmente">📂 Local</span>
         </div>
         <button class="btn ms-auto"
           [class.btn-warning]="isFavorite()"

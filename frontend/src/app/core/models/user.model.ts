@@ -10,7 +10,7 @@ export interface User {
 export interface Favorite {
   id: string;
   type: 'CHARACTER' | 'LOCATION' | 'EPISODE';
-  externalId: number;
+  externalId: number | string;
   name: string;
   image?: string;
   createdAt: string;

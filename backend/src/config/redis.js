@@ -24,4 +24,25 @@ const setCache = async (key, value, ttl = 3600) => {
 
 const deleteCache = async (key) => await client.del(key);
 
-module.exports = { connectRedis, getCache, setCache, deleteCache };
+/**
+ * Delete all keys matching a glob pattern (e.g. 'episodes:*').
+ * Uses manual SCAN loop compatible with redis v6.
+ */
+const deleteCacheByPattern = async (pattern) => {
+  let cursor = '0';
+  let total = 0;
+  do {
+    const reply = await client.scan(cursor, { MATCH: pattern, COUNT: 100 });
+    cursor = reply.cursor;
+    const keys = reply.keys;
+    if (keys.length > 0) {
+      for (const key of keys) {
+        await client.del(key);
+      }
+      total += keys.length;
+    }
+  } while (cursor !== '0');
+  return total;
+};
+
+module.exports = { connectRedis, getCache, setCache, deleteCache, deleteCacheByPattern };

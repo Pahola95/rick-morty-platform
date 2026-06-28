@@ -38,6 +38,12 @@ export class EpisodeDetailComponent implements OnInit {
     this.favoriteService.getFavorites().subscribe(res => this.favorites.set(res.data));
   }
 
+  /** Local episodes use a MongoDB ObjectId (24 hex chars) as id. */
+  get isLocalEpisode(): boolean {
+    const id = this.episode()?.id;
+    return typeof id === 'string' && /^[a-f\d]{24}$/i.test(id);
+  }
+
   isFavorite(): boolean {
     return this.favorites().some(f => f.type === 'EPISODE' && f.externalId === this.episode()?.id);
   }
@@ -48,7 +54,7 @@ export class EpisodeDetailComponent implements OnInit {
       this.favoriteService.removeFavorite(fav.id).subscribe(() => {
         this.favoriteService.getFavorites().subscribe(res => this.favorites.set(res.data));
       });
-    } else if (this.episode) {
+    } else if (this.episode()) {
       this.favoriteService.addFavorite({
         type: 'EPISODE',
         externalId: this.episode()?.id,

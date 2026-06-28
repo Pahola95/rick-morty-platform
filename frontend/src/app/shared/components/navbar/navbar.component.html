@@ -28,6 +28,9 @@
         <li class="nav-item" *ngIf="user()?.role === 'ADMIN'">
           <a class="nav-link" routerLink="/admin/users" routerLinkActive="active">👥 Admin</a>
         </li>
+        <li class="nav-item" *ngIf="user()?.role === 'ADMIN'">
+          <a class="nav-link" routerLink="/admin/episodes/upload" routerLinkActive="active">📂 Cargar CSV</a>
+        </li>
       </ul>
 
       <div class="d-flex align-items-center gap-2">

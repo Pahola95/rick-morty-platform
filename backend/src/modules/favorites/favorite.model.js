@@ -13,7 +13,7 @@ const favoriteSchema = new mongoose.Schema(
       required: true
     },
     externalId: {
-      type: Number,
+      type: mongoose.Schema.Types.Mixed,
       required: true
     },
     name: {

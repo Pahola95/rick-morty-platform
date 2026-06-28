@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./card.component.scss']
 })
 export class CardComponent {
-  @Input() id!: number;
+  @Input() id!: number | string;
   @Input() name!: string;
   @Input() image?: string;
   @Input() subtitle?: string;

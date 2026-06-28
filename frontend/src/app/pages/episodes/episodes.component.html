@@ -30,7 +30,7 @@
         [subtitle]="episode.air_date"
         [badge]="episode.episode"
         [type]="'EPISODE'"
-        [isFavorite]="isFavorite(episode.id)"
+        [isFavorite]="isFavorite(episode)"
         (cardClick)="goToDetail(episode.id)"
         (favoriteToggle)="toggleFavorite(episode)">
       </app-card>
