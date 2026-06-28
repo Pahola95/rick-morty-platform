@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, WritableSignal } from '@angular/core';
+import { Component, OnInit, signal, Signal, WritableSignal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -9,21 +9,62 @@ import { Favorite } from '../../core/models/user.model';
 import { CardComponent } from '../../shared/components/card/card.component';
 import { PaginationComponent } from '../../shared/components/pagination/pagination.component';
 import { SpinnerComponent } from '../../shared/components/spinner/spinner.component';
+import { ExportButtonComponent } from '../../shared/components/export-button/export-button.component';
+import { SortBarComponent, SortField, SortState } from '../../shared/components/sort-bar/sort-bar.component';
 
 @Component({
   selector: 'app-characters',
   standalone: true,
-  imports: [CommonModule, FormsModule, CardComponent, PaginationComponent, SpinnerComponent],
+  imports: [CommonModule, FormsModule, CardComponent, PaginationComponent, SpinnerComponent, ExportButtonComponent, SortBarComponent],
   templateUrl: './characters.component.html',
   styleUrls: ['./characters.component.scss']
 })
 export class CharactersComponent implements OnInit {
-  characters:WritableSignal<Character[]> = signal([]);
-  favorites: WritableSignal<Favorite[]>  = signal([]);
-  loading:WritableSignal<boolean> = signal(false);
+  characters: WritableSignal<Character[]> = signal([]);
+  favorites: WritableSignal<Favorite[]> = signal([]);
+  loading: WritableSignal<boolean> = signal(false);
   currentPage = 1;
   totalPages = 1;
   filters = { name: '', status: '', species: '' };
+
+  sort = signal<SortState>({ field: '', dir: 'asc' });
+
+  readonly sortFields: SortField[] = [
+    { value: 'id',      label: 'ID'       },
+    { value: 'name',    label: 'Nombre'   },
+    { value: 'status',  label: 'Estado'   },
+    { value: 'species', label: 'Especie'  },
+    { value: 'gender',  label: 'Género'   },
+  ];
+
+  /** Sorted view of the current page */
+  sortedCharacters = computed(() => {
+    const list = [...this.characters()];
+    const { field, dir } = this.sort();
+    if (!field) return list;
+    return list.sort((a, b) => {
+      const av = (a as any)[field] ?? '';
+      const bv = (b as any)[field] ?? '';
+      const cmp = typeof av === 'number'
+        ? av - bv
+        : String(av).localeCompare(String(bv), 'es', { sensitivity: 'base' });
+      return dir === 'asc' ? cmp : -cmp;
+    });
+  });
+
+  /** Flattened data ready for CSV / PDF export (respects current sort) */
+  exportData = computed(() =>
+    this.sortedCharacters().map(c => ({
+      ID: c.id,
+      Nombre: c.name,
+      Estado: c.status,
+      Especie: c.species,
+      Tipo: c.type,
+      Género: c.gender,
+      Origen: c.origin?.name ?? '',
+      Locación: c.location?.name ?? '',
+    }))
+  );
 
   constructor(
     private characterService: CharacterService,
@@ -70,6 +111,7 @@ export class CharactersComponent implements OnInit {
     }
   }
 
+  onSortChange(state: SortState) { this.sort.set(state); }
   applyFilters() { this.currentPage = 1; this.loadCharacters(); }
   onPageChange(page: number) { this.currentPage = page; this.loadCharacters(); }
   goToDetail(id: number) { this.router.navigate(['/characters', id]); }

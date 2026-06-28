@@ -16,10 +16,11 @@ const logger = winston.createLogger({
 });
 
 const requestLogger = (req, res, next) => {
-  logger.info(`${req.method} ${req.originalUrl}`);
-  logger.info(`Authorization: ${req.headers.authorization ? 'present' : 'missing'}`);
-  // Also log raw header to console for debugging
-  console.log('RAW_AUTH_HEADER:', req.headers.authorization);
+  const start = Date.now();
+  res.on('finish', () => {
+    const ms = Date.now() - start;
+    logger.info(`${req.method} ${req.originalUrl} ${res.statusCode} ${ms}ms`);
+  });
   next();
 };
 

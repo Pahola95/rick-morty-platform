@@ -1,0 +1,18 @@
+<div class="d-flex gap-2 align-items-center">
+  <button
+    class="btn btn-outline-success btn-sm"
+    [disabled]="exporting() || data.length === 0"
+    (click)="download('csv')"
+    title="Descargar CSV">
+    <span *ngIf="exporting()" class="spinner-border spinner-border-sm me-1" role="status"></span>
+    📄 CSV
+  </button>
+  <button
+    class="btn btn-outline-danger btn-sm"
+    [disabled]="exporting() || data.length === 0"
+    (click)="download('pdf')"
+    title="Descargar PDF">
+    <span *ngIf="exporting()" class="spinner-border spinner-border-sm me-1" role="status"></span>
+    📑 PDF
+  </button>
+</div>

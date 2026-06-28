@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, WritableSignal } from '@angular/core';
+import { Component, OnInit, signal, Signal, WritableSignal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -9,11 +9,13 @@ import { Favorite } from '../../core/models/user.model';
 import { CardComponent } from '../../shared/components/card/card.component';
 import { SpinnerComponent } from '../../shared/components/spinner/spinner.component';
 import { PaginationComponent } from '../../shared/components/pagination/pagination.component';
+import { ExportButtonComponent } from '../../shared/components/export-button/export-button.component';
+import { SortBarComponent, SortField, SortState } from '../../shared/components/sort-bar/sort-bar.component';
 
 @Component({
   selector: 'app-locations',
   standalone: true,
-  imports: [CommonModule, FormsModule, CardComponent, SpinnerComponent, PaginationComponent],
+  imports: [CommonModule, FormsModule, CardComponent, SpinnerComponent, PaginationComponent, ExportButtonComponent, SortBarComponent],
   templateUrl: './locations.component.html',
   styleUrls: ['./locations.component.scss']
 })
@@ -24,6 +26,39 @@ export class LocationsComponent implements OnInit {
   currentPage = 1;
   totalPages = 1;
   filters = { name: '', type: '', dimension: '' };
+
+  sort = signal<SortState>({ field: '', dir: 'asc' });
+
+  readonly sortFields: SortField[] = [
+    { value: 'id',        label: 'ID'         },
+    { value: 'name',      label: 'Nombre'     },
+    { value: 'type',      label: 'Tipo'       },
+    { value: 'dimension', label: 'Dimensión'  },
+  ];
+
+  sortedLocations = computed(() => {
+    const list = [...this.locations()];
+    const { field, dir } = this.sort();
+    if (!field) return list;
+    return list.sort((a, b) => {
+      const av = (a as any)[field] ?? '';
+      const bv = (b as any)[field] ?? '';
+      const cmp = typeof av === 'number'
+        ? av - bv
+        : String(av).localeCompare(String(bv), 'es', { sensitivity: 'base' });
+      return dir === 'asc' ? cmp : -cmp;
+    });
+  });
+
+  exportData = computed(() =>
+    this.sortedLocations().map(l => ({
+      ID: l.id,
+      Nombre: l.name,
+      Tipo: l.type,
+      Dimensión: l.dimension,
+      Residentes: l.residents?.length ?? 0,
+    }))
+  );
 
   constructor(
     private locationService: LocationService,
@@ -71,6 +106,7 @@ export class LocationsComponent implements OnInit {
     }
   }
 
+  onSortChange(state: SortState) { this.sort.set(state); }
   applyFilters() { this.currentPage = 1; this.loadLocations(); }
   onPageChange(page: number) { this.currentPage = page; this.loadLocations(); }
   goToDetail(id: number) { this.router.navigate(['/locations', id]); }

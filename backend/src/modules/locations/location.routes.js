@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const authMiddleware = require('../../config/auth0');
 const syncUser = require('../../common/middlewares/syncUser');
+const validate = require('../../common/middlewares/validate');
+const { listLocationsRules, getByIdRules } = require('./location.validators');
 const { getLocations, getLocationById, getLocationStats } = require('./location.controller');
 
 router.use(authMiddleware);
@@ -34,8 +36,10 @@ router.use(syncUser);
  *     responses:
  *       200:
  *         description: Lista de locaciones paginada
+ *       422:
+ *         description: Parámetros de entrada inválidos
  */
-router.get('/', getLocations);
+router.get('/', listLocationsRules, validate, getLocations);
 
 /**
  * @swagger
@@ -68,7 +72,9 @@ router.get('/stats', getLocationStats);
  *     responses:
  *       200:
  *         description: Detalle de la locación
+ *       422:
+ *         description: Parámetros de entrada inválidos
  */
-router.get('/:id', getLocationById);
+router.get('/:id', getByIdRules, validate, getLocationById);
 
 module.exports = router;

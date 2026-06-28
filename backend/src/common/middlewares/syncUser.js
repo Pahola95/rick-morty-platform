@@ -15,8 +15,6 @@ const syncUser = async (req, res, next) => {
                  || req.auth.payload[`${process.env.AUTH0_AUDIENCE}name`]
                  || 'Usuario';
 
-    console.log('SYNC USER PAYLOAD:', JSON.stringify(req.auth.payload, null, 2));
-
     let user = await userRepository.findByAuth0Id(auth0Id);
 
     if (!user) {

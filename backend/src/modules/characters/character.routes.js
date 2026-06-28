@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const authMiddleware = require('../../config/auth0');
 const syncUser = require('../../common/middlewares/syncUser');
+const validate = require('../../common/middlewares/validate');
+const { listCharactersRules, getByIdRules, getMultipleRules } = require('./character.validators');
 const { getCharacters, getCharacterById, getCharacterStats, getCharactersByIds } = require('./character.controller');
 
 router.use(authMiddleware);
@@ -41,8 +43,10 @@ router.use(syncUser);
  *         description: Lista de personajes paginada
  *       401:
  *         description: No autenticado
+ *       422:
+ *         description: Parámetros de entrada inválidos
  */
-router.get('/', getCharacters);
+router.get('/', listCharactersRules, validate, getCharacters);
 
 /**
  * @swagger
@@ -72,12 +76,14 @@ router.get('/stats', getCharacterStats);
  *         required: true
  *         schema:
  *           type: string
- *         description: IDs separados por coma (ej. 1,2,3)
+ *         description: IDs separados por coma (ej. 1,2,3) — máximo 50
  *     responses:
  *       200:
  *         description: Lista de personajes
+ *       422:
+ *         description: Parámetros de entrada inválidos
  */
-router.get('/multiple/:ids', getCharactersByIds);
+router.get('/multiple/:ids', getMultipleRules, validate, getCharactersByIds);
 
 /**
  * @swagger
@@ -98,7 +104,9 @@ router.get('/multiple/:ids', getCharactersByIds);
  *         description: Detalle del personaje
  *       404:
  *         description: Personaje no encontrado
+ *       422:
+ *         description: Parámetros de entrada inválidos
  */
-router.get('/:id', getCharacterById);
+router.get('/:id', getByIdRules, validate, getCharacterById);
 
 module.exports = router;

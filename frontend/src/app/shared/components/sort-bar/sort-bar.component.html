@@ -1,0 +1,14 @@
+<div class="d-flex gap-2 align-items-center">
+  <select class="form-select form-select-sm" style="min-width:160px"
+    [(ngModel)]="field" (change)="onFieldChange()">
+    <option value="">Ordenar por...</option>
+    <option *ngFor="let f of fields" [value]="f.value">{{ f.label }}</option>
+  </select>
+
+  <button class="btn btn-outline-secondary btn-sm"
+    [disabled]="!field"
+    (click)="toggleDir()"
+    [title]="dir === 'asc' ? 'Ascendente' : 'Descendente'">
+    {{ dir === 'asc' ? '↑ Asc' : '↓ Desc' }}
+  </button>
+</div>

@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const authMiddleware = require('../../config/auth0');
 const syncUser = require('../../common/middlewares/syncUser');
+const validate = require('../../common/middlewares/validate');
+const { addFavoriteRules, removeFavoriteRules } = require('./favorite.validators');
 const { getFavorites, addFavorite, removeFavorite } = require('./favorite.controller');
 
 router.use(authMiddleware);
@@ -50,8 +52,10 @@ router.get('/', getFavorites);
  *         description: Agregado a favoritos
  *       400:
  *         description: Ya está en favoritos
+ *       422:
+ *         description: Datos de entrada inválidos
  */
-router.post('/', addFavorite);
+router.post('/', addFavoriteRules, validate, addFavorite);
 
 /**
  * @swagger
@@ -72,7 +76,9 @@ router.post('/', addFavorite);
  *         description: Eliminado de favoritos
  *       404:
  *         description: Favorito no encontrado
+ *       422:
+ *         description: ID inválido
  */
-router.delete('/:id', removeFavorite);
+router.delete('/:id', removeFavoriteRules, validate, removeFavorite);
 
 module.exports = router;

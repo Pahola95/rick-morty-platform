@@ -2,6 +2,8 @@ const router = require('express').Router();
 const authMiddleware = require('../../config/auth0');
 const syncUser = require('../../common/middlewares/syncUser');
 const roleGuard = require('../../common/middlewares/roleGuard');
+const validate = require('../../common/middlewares/validate');
+const { updateRoleRules, deleteUserRules } = require('./user.validators');
 const { getAllUsers, updateRole, deleteUser, getProfile } = require('./user.controller');
 
 router.use(authMiddleware);
@@ -18,10 +20,6 @@ router.use(syncUser);
  *     responses:
  *       200:
  *         description: Perfil del usuario
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Success'
  *       401:
  *         description: No autenticado
  */
@@ -72,8 +70,10 @@ router.get('/', roleGuard('ADMIN'), getAllUsers);
  *         description: Rol actualizado
  *       403:
  *         description: Sin permisos
+ *       422:
+ *         description: Datos de entrada inválidos
  */
-router.put('/:id/role', roleGuard('ADMIN'), updateRole);
+router.put('/:id/role', roleGuard('ADMIN'), updateRoleRules, validate, updateRole);
 
 /**
  * @swagger
@@ -94,7 +94,9 @@ router.put('/:id/role', roleGuard('ADMIN'), updateRole);
  *         description: Usuario eliminado
  *       403:
  *         description: Sin permisos
+ *       422:
+ *         description: ID inválido
  */
-router.delete('/:id', roleGuard('ADMIN'), deleteUser);
+router.delete('/:id', roleGuard('ADMIN'), deleteUserRules, validate, deleteUser);
 
 module.exports = router;

@@ -2,7 +2,7 @@
   <h2 class="text-info mb-4">🌍 Locaciones</h2>
 
   <!-- Filtros -->
-  <div class="filter-bar mb-4">
+  <div class="filter-bar mb-3">
     <input class="form-control" placeholder="Buscar por nombre..."
       [(ngModel)]="filters.name" (keyup.enter)="applyFilters()">
     <input class="form-control" placeholder="Tipo (Planet, Space station...)"
@@ -12,10 +12,20 @@
     <button class="btn btn-info" (click)="applyFilters()">🔍 Buscar</button>
   </div>
 
+  <!-- Ordenamiento + Export -->
+  <div class="d-flex flex-wrap align-items-center gap-3 mb-4">
+    <app-sort-bar [fields]="sortFields" (sortChange)="onSortChange($event)"></app-sort-bar>
+    <app-export-button
+      [data]="exportData()"
+      filename="locaciones"
+      title="Locaciones - Rick & Morty">
+    </app-export-button>
+  </div>
+
   <app-spinner *ngIf="loading()"></app-spinner>
 
   <div class="row g-3" *ngIf="!loading()">
-    <div class="col-md-3 col-sm-6" *ngFor="let location of locations()">
+    <div class="col-md-3 col-sm-6" *ngFor="let location of sortedLocations()">
       <app-card
         [id]="location.id"
         [name]="location.name"
@@ -28,7 +38,7 @@
       </app-card>
     </div>
 
-    <div class="col-12 text-center text-muted py-5" *ngIf="locations().length === 0">
+    <div class="col-12 text-center text-muted py-5" *ngIf="sortedLocations().length === 0">
       No se encontraron locaciones con esos filtros.
     </div>
   </div>

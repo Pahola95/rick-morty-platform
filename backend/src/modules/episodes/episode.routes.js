@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const authMiddleware = require('../../config/auth0');
 const syncUser = require('../../common/middlewares/syncUser');
+const validate = require('../../common/middlewares/validate');
+const { listEpisodesRules, getByIdRules } = require('./episode.validators');
 const { getEpisodes, getEpisodeById, getEpisodeStats } = require('./episode.controller');
 
 router.use(authMiddleware);
@@ -31,8 +33,10 @@ router.use(syncUser);
  *     responses:
  *       200:
  *         description: Lista de episodios paginada
+ *       422:
+ *         description: Parámetros de entrada inválidos
  */
-router.get('/', getEpisodes);
+router.get('/', listEpisodesRules, validate, getEpisodes);
 
 /**
  * @swagger
@@ -65,7 +69,9 @@ router.get('/stats', getEpisodeStats);
  *     responses:
  *       200:
  *         description: Detalle del episodio
+ *       422:
+ *         description: Parámetros de entrada inválidos
  */
-router.get('/:id', getEpisodeById);
+router.get('/:id', getByIdRules, validate, getEpisodeById);
 
 module.exports = router;
